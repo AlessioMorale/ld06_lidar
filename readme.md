@@ -1,3 +1,10 @@
+# LD06 Lidar ROS driver
+
+This is an attempt to fix and improve the driver provided by LDRobots in their
+[website](https://www.ldrobot.com/download/44)
+
+---- Original readme ----
+
 ## 编译方法
 
 使用catkin编译，执行如下操作
