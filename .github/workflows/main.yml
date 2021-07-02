@@ -1,0 +1,84 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+jobs:
+  test_docker: # On Linux, iterates on all ROS 1 and ROS 2 distributions.
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ros_distribution:
+          - melodic
+          - noetic
+        include:
+          # Melodic Morenia (May 2018 - May 2023)
+          - docker_image: ros:melodic-perception-bionic
+            ros_distribution: melodic
+            ros_version: 1
+
+          # Noetic Ninjemys (May 2020 - May 2025)
+          - docker_image: ros:noetic-perception-focal
+            ros_distribution: noetic
+            ros_version: 1
+
+    container:
+      image: ${{ matrix.docker_image }}
+    steps:
+      - name: install Melodic additional prereq
+        if: ${{ matrix.ros_distribution == 'melodic' }}
+        run: |
+          echo Setup melodic additional build requirements
+          DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install python3-pip --no-install-recommends -y
+          pip3 install setuptools
+
+      - name: install prereq tools
+        if: ${{ matrix.ros_version == 1 }}
+        run: |
+          echo Setup build requirements
+          DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install sudo python3-pip lcov git --no-install-recommends -y
+          pip3 install colcon-common-extensions
+          pip3 install colcon-lcov-result
+          pip3 install colcon-coveragepy-result
+          pip3 install colcon-mixin
+          pip3 install vcstool
+
+      - name: build and test ROS 1
+        if: ${{ matrix.ros_version == 1 }}
+        uses: ros-tooling/action-ros-ci@v0.2
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        with:
+          package-name: ldlidar
+          target-ros1-distro: ${{ matrix.ros_distribution }}
+      - name: build and test ROS 2
+        if: ${{ matrix.ros_version == 2 }}
+        uses: ros-tooling/action-ros-ci@v0.2
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        with:
+          package-name: ldlidar
+          target-ros2-distro: ${{ matrix.ros_distribution }}
+      - name: asan
+        uses: ros-tooling/action-ros-ci@v0.2
+        with:
+          colcon-defaults: |
+            {
+              "build": {
+                "mixin": ["asan-gcc"]
+              }
+            }
+          colcon-mixin-repository: https://raw.githubusercontent.com/colcon/colcon-mixin-repository/3e627e0fa30db85aea05a50e2c61a9832664d236/index.yaml
+          package-name: ldlidar
+          target-ros1-distro: ${{ matrix.ros_distribution }}
+        env:
+          DEBIAN_FRONTEND: noninteractive
