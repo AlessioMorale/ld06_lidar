@@ -129,7 +129,7 @@ bool LiPkg::Parse(const uint8_t * data, long len)
 				PointData data;
 				for (int i = 0; i < POINT_PER_PACK; i++)
 				{
-					data.distance = pkg->point[i].distance;
+					data.distance = (float)pkg->point[i].distance / 1e3f; // distance in mm
 					data.angle = start + i * step;
 					if (data.angle >= 360.0)
 					{

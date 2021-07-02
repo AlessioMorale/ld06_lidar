@@ -47,11 +47,11 @@ typedef struct  __attribute__((packed))
 struct PointData
 {
 	float angle;
-	uint16_t distance;
+	float distance;
 	uint8_t confidence;
 	double x;
     double y;
-	PointData(float angle, uint16_t distance, uint8_t confidence , double x = 0, double y = 0)
+	PointData(float angle, float distance, uint8_t confidence , double x = 0, double y = 0)
 	{
 		this->angle = angle;
 		this->distance = distance;
