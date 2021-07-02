@@ -1,0 +1,6 @@
+<launch>
+
+ <node name="LD06" pkg="ldlidar" type="ldlidar" args="LD06" output="screen" >
+ </node>
+
+</launch>
