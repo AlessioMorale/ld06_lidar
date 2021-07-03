@@ -82,7 +82,7 @@ public:
 	bool Parse(const uint8_t* data , long len);/*parse single packet*/
 	bool AssemblePacket();/*combine stantard data into data frames and calibrate*/
 	sensor_msgs::LaserScan GetLaserScan() {return output;}
-
+	void SetLidarFrame(const std::string lidar_frame) { mLidarFrame = lidar_frame;};
 private:
 	uint16_t mTimestamp;
 	double mSpeed;
@@ -93,6 +93,7 @@ private:
 	bool mIsPkgReady;
 	bool mFrameReady;
 	sensor_msgs::LaserScan output;
+	std::string mLidarFrame;
 	void ToLaserscan(std::vector<PointData> src);
 };
 #endif

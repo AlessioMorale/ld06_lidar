@@ -17,6 +17,10 @@ int main(int argc , char **argv)
   
     CmdInterfaceLinux cmd_port;
     std::string port_name;
+	std::string lidar_frame;
+
+	nh_private.param<std::string>("lidar_frame", lidar_frame, "lidar_frame");
+	lidar->SetLidarFrame(lidar_frame);
 
 	nh_private.param<std::string>("serial_port", port_name, std::string());
 

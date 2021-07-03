@@ -226,7 +226,7 @@ void LiPkg::ToLaserscan(std::vector<PointData> src)
   /*Calculate the number of scanning points*/
   unsigned int beam_size = ceil((angle_max - angle_min) / angle_increment);
   output.header.stamp = ros::Time::now();
-  output.header.frame_id = "lidar_frame";
+  output.header.frame_id = mLidarFrame;
   output.angle_min = angle_min;
   output.angle_max = angle_max;
   output.range_min = range_min;
