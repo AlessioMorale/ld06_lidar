@@ -9,41 +9,55 @@
 
 int main(int argc , char **argv)
 {
-	ros::init(argc, argv, "product");
+	ros::init(argc, argv, "ldlidar_node");
 	ros::NodeHandle nh;                    /* create a ROS Node */
-
+	ros::NodeHandle nh_private("~");
  	
 	LiPkg * lidar = new LiPkg;
   
     CmdInterfaceLinux cmd_port;
-    std::vector<std::pair<std::string, std::string> > device_list;
     std::string port_name;
-    cmd_port.GetCmdDevices(device_list);
-    for (auto n : device_list)
-    {
-        std::cout << n.first << "    " << n.second << std::endl;
-        if(strstr(n.second.c_str(),"CP2102"))
-        {
-            port_name = n.first;
-        }
-    }
 
-	if(port_name.empty())
+	nh_private.param<std::string>("serial_port", port_name, std::string());
+
+	if (port_name.empty())
 	{
-		std::cout<<"Can't find LiDAR LD06"<< std::endl;
+		ROS_INFO("Autodetecting serial port");
+		std::vector<std::pair<std::string, std::string>> device_list;
+		cmd_port.GetCmdDevices(device_list);
+		auto found = std::find_if(
+			device_list.begin(),
+			device_list.end(),
+			[](std::pair<std::string, std::string> n)
+			{ return strstr(n.second.c_str(), "CP2102"); });
+
+		if (found != device_list.end())
+		{
+			ROS_INFO_STREAM(found->first << "    " << found->second);
+			port_name = found->first;
+		}
+		else
+		{
+			ROS_ERROR("Can't find LiDAR LD06");
+			return -1;
+		}
 	}
 
-	std::cout<<"FOUND LiDAR_LD06"  <<std::endl;
+	ROS_INFO_STREAM("Using port " << port_name);
+
 	cmd_port.SetReadCallback([&lidar](const char *byte, size_t len) {
 		if(lidar->Parse((uint8_t*)byte, len))
 		{
-			lidar->AssemblePacket();  
+			lidar->AssemblePacket();
 		}
 	});
 
-	if(cmd_port.Open(port_name))
-		std::cout<<"LiDAR_LD06 started successfully "  <<std::endl;
-	
+	if(cmd_port.Open(port_name)){
+		ROS_INFO("LiDAR_LD06 started successfully");
+	} else {
+		ROS_ERROR("Can't open the serial port");
+		return -1;
+	}
 	ros::Publisher lidar_pub = nh.advertise<sensor_msgs::LaserScan>("LiDAR/LD06", 1); /*create a ROS topic */
 	
 	while (ros::ok())
