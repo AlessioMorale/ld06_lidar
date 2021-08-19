@@ -243,8 +243,9 @@ void LiPkg::ToLaserscan(std::vector<PointData> src)
   {
 	float range = point.distance ;
     float angle = ANGLE_TO_RADIAN(point.angle);
-	
-    int index = (int)((angle - output.angle_min) / output.angle_increment);
+
+    int index = (int)((output.angle_max - angle) / output.angle_increment);
+    // int index = (int)((angle - output.angle_min) / output.angle_increment); //default, but this is inverted
     if (index >= 0 && index < beam_size)
     {
       /*If the current content is Nan, it is assigned directly*/
