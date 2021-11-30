@@ -21,3 +21,9 @@ An example launch file including all parameters is provided below:
  </node>
 </launch>
 ```
+
+## ROS Support
+
+- Kinetic
+- Melodic
+- Noetic
