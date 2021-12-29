@@ -22,6 +22,19 @@ An example launch file including all parameters is provided below:
 </launch>
 ```
 
+## Building the driver
+
+```bash
+# create a workspace folder (or use the existing workspace for your robot)
+mkdir -p lidar_driver_ws/src
+cd lidar_driver_ws/src
+# clone the repo within a workspace
+git clone https://github.com/AlessioMorale/ld06_lidar.git
+cd ..
+# install all prerequisites & build
+rosdep install --from-paths src --ignore-src -y
+catkin build
+```
 
 ---- Original readme ----
 
