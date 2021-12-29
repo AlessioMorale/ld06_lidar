@@ -58,7 +58,7 @@ jobs:
         env:
           DEBIAN_FRONTEND: noninteractive
         with:
-          package-name: ldlidar
+          package-name: ld06_lidar
           target-ros1-distro: ${{ matrix.ros_distribution }}
       - name: build and test ROS 2
         if: ${{ matrix.ros_version == 2 }}
@@ -66,7 +66,7 @@ jobs:
         env:
           DEBIAN_FRONTEND: noninteractive
         with:
-          package-name: ldlidar
+          package-name: ld06_lidar
           target-ros2-distro: ${{ matrix.ros_distribution }}
       - name: asan
         uses: ros-tooling/action-ros-ci@v0.2
@@ -78,7 +78,7 @@ jobs:
               }
             }
           colcon-mixin-repository: https://raw.githubusercontent.com/colcon/colcon-mixin-repository/3e627e0fa30db85aea05a50e2c61a9832664d236/index.yaml
-          package-name: ldlidar
+          package-name: ld06_lidar
           target-ros1-distro: ${{ matrix.ros_distribution }}
         env:
           DEBIAN_FRONTEND: noninteractive
