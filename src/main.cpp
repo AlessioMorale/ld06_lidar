@@ -9,14 +9,14 @@
 
 int main(int argc , char **argv)
 {
-	ros::init(argc, argv, "ldlidar_node");
+	ros::init(argc, argv, "ld06_lidar");
 	ros::NodeHandle nh;                    /* create a ROS Node */
 	ros::NodeHandle nh_private("~");
  	
 	LiPkg * lidar = new LiPkg;
   
-    CmdInterfaceLinux cmd_port;
-    std::string port_name;
+    	CmdInterfaceLinux cmd_port;
+    	std::string port_name;
 	std::string lidar_frame;
 
 	nh_private.param<std::string>("lidar_frame", lidar_frame, "lidar_frame");
