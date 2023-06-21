@@ -54,7 +54,7 @@ jobs:
 
       - name: build and test ROS 1
         if: ${{ matrix.ros_version == 1 }}
-        uses: ros-tooling/action-ros-ci@v0.2
+        uses: ros-tooling/action-ros-ci@v0.3
         env:
           DEBIAN_FRONTEND: noninteractive
         with:
@@ -62,14 +62,14 @@ jobs:
           target-ros1-distro: ${{ matrix.ros_distribution }}
       - name: build and test ROS 2
         if: ${{ matrix.ros_version == 2 }}
-        uses: ros-tooling/action-ros-ci@v0.2
+        uses: ros-tooling/action-ros-ci@v0.3
         env:
           DEBIAN_FRONTEND: noninteractive
         with:
           package-name: ld06_lidar
           target-ros2-distro: ${{ matrix.ros_distribution }}
       - name: asan
-        uses: ros-tooling/action-ros-ci@v0.2
+        uses: ros-tooling/action-ros-ci@v0.3
         with:
           colcon-defaults: |
             {
