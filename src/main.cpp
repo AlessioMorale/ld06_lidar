@@ -64,7 +64,7 @@ int main(int argc , char **argv)
 	}
 	ros::Publisher lidar_pub = nh.advertise<sensor_msgs::LaserScan>("LiDAR/LD06", 1); /*create a ROS topic */
 	
-    ros::Rate rate(100.0);
+    ros::Rate rate(20.0);
 	while (ros::ok())
 	{
 		if (lidar->IsFrameReady())
